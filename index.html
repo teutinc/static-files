@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="static-files" ng-controller="MainCtrl">
 <head>
-    <title>Install Vhosts on apache</title>
+    <title>{{title}}</title>
     <style type="text/css" media="screen">
         #editor {
             position: absolute;
@@ -17,6 +17,8 @@
 <div id="editor">
 </div>
 
+<script src="js/lib/angular/angular.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/static-files.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     // first set the content text in the editor div from the text file
