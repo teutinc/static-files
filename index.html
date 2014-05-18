@@ -14,30 +14,12 @@
 </head>
 <body>
 
-<div id="editor">
-</div>
+<ng-view />
 
 <script src="js/lib/angular/angular.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/lib/angular/angular-route.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/static-files.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-<script>
-    // first set the content text in the editor div from the text file
-    var req = new XMLHttpRequest();
-    req.open('GET', 'test.sh', false);
-    req.onload = function (e) {
-        var text = this.responseText;
-        var editor = document.getElementById('editor');
-        editor.textContent = text;
-    }
-    req.send();
-
-    // open the editor, in read only mode, to display the file content
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.setReadOnly(true);
-    editor.setShowPrintMargin(false);
-    editor.getSession().setMode("ace/mode/sh");
-</script>
 
 </body>
 </html>
