@@ -14,7 +14,7 @@
         $routeProvider.when('/error/404', {
             templateUrl: 'partials/404.html',
         });
-        $routeProvider.when('/:syntax/:filePath*', {
+        $routeProvider.when('/:filePath*', {
             templateUrl: 'partials/static-file.html',
             controller: 'StaticFileCtrl'
         });
@@ -40,7 +40,6 @@
      */
     staticFiles.controller('StaticFileCtrl', function ($scope, $routeParams) {
         $scope.filePath = $routeParams.filePath;
-        $scope.syntax = $routeParams.syntax;
 
         $scope.setTitle($scope.filePath);
     });
@@ -69,8 +68,7 @@
         return {
             restrict: 'AE',
             scope: {
-                filePath: '=',
-                syntax: '='
+                filePath: '='
             },
             link: function postLink(scope, element) {
                 element.addClass('static-editor');
@@ -80,14 +78,15 @@
                 editor.setTheme("ace/theme/monokai");
                 editor.setReadOnly(true);
                 editor.setShowPrintMargin(false);
-                if (scope.syntax) {
-                    editor.getSession().setMode("ace/mode/" + scope.syntax);
-                }
+                // get the module to manage modes by files extensions
+                var modelist = window.ace.require("ace/ext/modelist");
 
                 // load the file (asynchronously)
                 staticFileProxy.load(scope.filePath).then(function (response) {
+                    var mode = modelist.getModeForPath(scope.filePath).mode;
                     editor.setValue(response.data);
                     editor.clearSelection(); // avoid text set as value, to be fully selected
+                    editor.getSession().setMode(mode);
                 });
             }
         };
