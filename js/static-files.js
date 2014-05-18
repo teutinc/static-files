@@ -14,11 +14,7 @@
         $routeProvider.when('/error/404', {
             templateUrl: 'partials/404.html',
         });
-        $routeProvider.when('/:file', {
-            templateUrl: 'partials/static-file.html',
-            controller: 'StaticFileCtrl'
-        });
-        $routeProvider.when('/:syntax/:file', {
+        $routeProvider.when('/:syntax/:filePath*', {
             templateUrl: 'partials/static-file.html',
             controller: 'StaticFileCtrl'
         });
@@ -43,10 +39,10 @@
      * The StaticFile controller.
      */
     staticFiles.controller('StaticFileCtrl', function ($scope, $routeParams) {
-        $scope.filename = $routeParams.file;
-        $scope.syntax = $routeParams.syntax || 'not defined';
+        $scope.filePath = $routeParams.filePath;
+        $scope.syntax = $routeParams.syntax;
 
-        $scope.setTitle($scope.filename);
+        $scope.setTitle($scope.filePath);
     });
 
     /**
@@ -56,8 +52,8 @@
         $get: function ($http, $location) {
             var provider = this;
             return {
-                load: function (filename) {
-                    return $http.get(provider.baseURL + filename).catch(function () {
+                load: function (filePath) {
+                    return $http.get(provider.baseURL + filePath).catch(function () {
                         $location.url('error/404');
                     });
                 }
@@ -73,7 +69,7 @@
         return {
             restrict: 'AE',
             scope: {
-                filename: '=',
+                filePath: '=',
                 syntax: '='
             },
             link: function postLink(scope, element) {
@@ -89,7 +85,7 @@
                 }
 
                 // load the file (asynchronously)
-                staticFileProxy.load(scope.filename).then(function (response) {
+                staticFileProxy.load(scope.filePath).then(function (response) {
                     editor.setValue(response.data);
                     editor.clearSelection(); // avoid text set as value, to be fully selected
                 });
