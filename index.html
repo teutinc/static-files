@@ -2,19 +2,12 @@
 <html lang="en" ng-app="static-files" ng-controller="MainCtrl">
 <head>
     <title>{{title}}</title>
-    <style type="text/css" media="screen">
-        #editor {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="css/static-file.css" media="screen"/>
 </head>
 <body>
 
-<ng-view />
+<div id="wrapper" ng-view>
+</div>
 
 <script src="js/lib/angular/angular.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/lib/angular/angular-route.js" type="text/javascript" charset="utf-8"></script>

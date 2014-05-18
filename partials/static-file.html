@@ -1,25 +1,2 @@
-<h2>File: {{filename}}, with syntax {{syntax}}</h2>
-
-<div id="editor">
+<div ace-editor filename="filename" syntax="syntax">
 </div>
-
-<script>
-    // first set the content text in the editor div from the text file
-    var req = new XMLHttpRequest();
-    req.open('GET', 'test.sh', false);
-    req.onload = function (e) {
-        var text = this.responseText;
-        var editor = document.getElementById('editor');
-        editor.textContent = text;
-    }
-    req.send();
-
-    // open the editor, in read only mode, to display the file content
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.setReadOnly(true);
-    editor.setShowPrintMargin(false);
-    editor.renderer.setShowGutter(false);
-    editor.getSession().setMode("ace/mode/sh");
-</script>
-

@@ -49,4 +49,52 @@
         $scope.setTitle($scope.filename);
     });
 
+    /**
+     * Service to load static files.
+     */
+    staticFiles.provider('staticFileProxy', {
+        $get: function ($http, $location) {
+            var provider = this;
+            return {
+                load: function (filename) {
+                    return $http.get(provider.baseURL + filename).catch(function () {
+                        $location.url('error/404');
+                    });
+                }
+            };
+        },
+        baseURL: 'static/'
+    });
+
+    /**
+     * Directive to manage the ace editor, and load the file content, using the staticFileProxy service.
+     */
+    staticFiles.directive('aceEditor', function factory(staticFileProxy) {
+        return {
+            restrict: 'AE',
+            scope: {
+                filename: '=',
+                syntax: '='
+            },
+            link: function postLink(scope, element) {
+                element.addClass('static-editor');
+
+                // create an ace editor, in read only mode, to display the file content
+                var editor = window.ace.edit(element[0]);
+                editor.setTheme("ace/theme/monokai");
+                editor.setReadOnly(true);
+                editor.setShowPrintMargin(false);
+                if (scope.syntax) {
+                    editor.getSession().setMode("ace/mode/" + scope.syntax);
+                }
+
+                // load the file (asynchronously)
+                staticFileProxy.load(scope.filename).then(function (response) {
+                    editor.setValue(response.data);
+                    editor.clearSelection(); // avoid text set as value, to be fully selected
+                });
+            }
+        };
+    });
+
 })();
