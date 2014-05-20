@@ -10,16 +10,23 @@
     /**
      * Routes configuration
      */
-    staticFiles.config(function ($routeProvider) {
-        $routeProvider.when('/error/404', {
+    staticFiles.config(function ($locationProvider, $routeProvider) {
+        $locationProvider.html5Mode(true);
+
+        $routeProvider.when('/404', {
             templateUrl: 'partials/404.html',
+            controller: '404Ctrl'
+        });
+        $routeProvider.when('/404/:filePath*', {
+            templateUrl: 'partials/404.html',
+            controller: '404Ctrl'
         });
         $routeProvider.when('/:filePath*', {
             templateUrl: 'partials/static-file.html',
             controller: 'StaticFileCtrl'
         });
         $routeProvider.otherwise({
-            redirectTo: '/error/404'
+            redirectTo: '/404'
         });
     });
 
@@ -45,6 +52,15 @@
     });
 
     /**
+     * The StaticFile controller.
+     */
+    staticFiles.controller('404Ctrl', function ($scope, $routeParams) {
+        $scope.filePath = $routeParams.filePath || 'everything';
+
+        $scope.setTitle('404');
+    });
+
+    /**
      * Service to load static files.
      */
     staticFiles.provider('staticFileProxy', {
@@ -52,13 +68,17 @@
             var provider = this;
             return {
                 load: function (filePath) {
-                    return $http.get(provider.baseURL + filePath).catch(function () {
-                        $location.url('error/404');
-                    });
+                    return $http.get(provider.baseURL + filePath).then(
+                        function (response) {
+                            return response.data;
+                        }, function (response) {
+                            $location.url('/404/' + filePath);
+                            return $q.reject(response.status);
+                        });
                 }
             };
         },
-        baseURL: 'static/'
+        baseURL: '/static/'
     });
 
     /**
@@ -82,9 +102,9 @@
                 var modelist = window.ace.require("ace/ext/modelist");
 
                 // load the file (asynchronously)
-                staticFileProxy.load(scope.filePath).then(function (response) {
+                staticFileProxy.load(scope.filePath).then(function (data) {
                     var mode = modelist.getModeForPath(scope.filePath).mode;
-                    editor.setValue(response.data);
+                    editor.setValue(data);
                     editor.clearSelection(); // avoid text set as value, to be fully selected
                     editor.getSession().setMode(mode);
                 });

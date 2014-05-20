@@ -16,3 +16,19 @@ body {
     height: 100%;
 }
 
+.container-404 {
+    text-align: center;
+}
+
+.container-404 h1 {
+    font-family: "Bookman", Georgia, "Times New Roman", serif;
+    font-size: 96pt;
+    font-weight: bolder;
+    color: darkred;
+}
+
+.container-404 p {
+    font-family: "Consolas", "Menlo", "Courier", monospace;
+    font-size: 11pt;
+    color: darkred;
+}
