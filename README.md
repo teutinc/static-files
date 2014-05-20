@@ -5,7 +5,7 @@ Display files in HTML format with syntax highlighting.
 
 HowTo
 -----
-Currently it only works at a root of a domain (didn't test at other place, maybe will work by changing the index.html base-url tag value).
+Currently it only works at a root of a domain (didn't tried another place, maybe will just work by changing the index.html base-url tag value).
 
 Install all the file in a directory exposed by the web-server, like ```/some/folder```.
 Rewrite rule needs to be configured in the web-server, for example in nginx:
@@ -23,7 +23,7 @@ server {
 }
 ```
 
-To validate the installation, you could try urls:
+To validate the installation, you could try those URLs:
 - ```http://domain.example.com/test.sh```
 - ```http://domain.example.com/foo/Bar.java```
 
