@@ -106,6 +106,7 @@
                     var mode = modelist.getModeForPath(scope.filePath).mode;
                     editor.setValue(data);
                     editor.clearSelection(); // avoid text set as value, to be fully selected
+                    editor.navigateFileStart(); // put the cursor at the beginning instead of the end.
                     editor.getSession().setMode(mode);
                 });
             }
